@@ -115,4 +115,27 @@ public class CountryController
         }
         return new ResponseEntity<>(maxPopulation, HttpStatus.OK);
     }
+
+    //median population
+    @GetMapping(value = "population/median", produces = {"application/json"})
+    public ResponseEntity<?> getMedainAge()
+    {
+        List<Country> medianAge = new ArrayList<>();
+        countryrepos.findAll()
+                .iterator()
+                .forEachRemaining(medianAge::add);
+        medianAge.sort((c1,c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+        int lenghtOfList = 0;
+        for (Country c : medianAge)
+        {
+            lenghtOfList += 1;
+        }
+        int middle = lenghtOfList / 2;
+        if(lenghtOfList % 2 == 1)
+        {
+            middle += 1;
+        }
+
+        return new ResponseEntity<>(medianAge.get(middle), HttpStatus.OK);
+    }
 }
